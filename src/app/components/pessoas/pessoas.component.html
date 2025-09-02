@@ -4,7 +4,7 @@
   @if (pessoas().length > 0) {
     <ul>
       @for (pessoa of pessoas(); track pessoa.id) {
-        <li>{{ pessoa.nome }} ({{ pessoa.email }} anos)</li>
+        <li>{{ pessoa.name }} ({{ pessoa.email }})</li>
       }
     </ul>
   } @else {
