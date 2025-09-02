@@ -1,13 +1,59 @@
-<div>
-  <h2>Lista de Pessoas (API Quarkus)</h2>
+<div class="container">
+  <div class="form-section">
+    <h2>{{ editandoId() ? 'Editar Pessoa' : 'Cadastrar Nova Pessoa' }}</h2>
 
-  @if (pessoas().length > 0) {
-    <ul>
-      @for (pessoa of pessoas(); track pessoa.id) {
-        <li>{{ pessoa.name }} ({{ pessoa.email }})</li>
-      }
-    </ul>
-  } @else {
-    <p>Carregando pessoas ou nenhuma encontrada...</p>
-  }
+    <form [formGroup]="pessoaForm" (ngSubmit)="salvarPessoa()">
+      <div class="form-group">
+        <label for="name">name:</label>
+        <input id="name" type="text" formControlName="name" placeholder="name completo" />
+        @if (pessoaForm.get('name')?.invalid && pessoaForm.get('name')?.touched) {
+          <small class="error">O name é obrigatório.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" type="email" formControlName="email" placeholder="exemplo@email.com" />
+        @if (pessoaForm.get('email')?.touched && pessoaForm.get('email')?.errors) {
+          @if (pessoaForm.get('email')?.errors?.['required']) {
+            <small class="error">O email é obrigatório.</small>
+          }
+          @if (pessoaForm.get('email')?.errors?.['email']) {
+            <small class="error">Formato de email inválido.</small>
+          }
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="pessoaForm.invalid">
+          {{ editandoId() ? 'Atualizar' : 'Salvar' }}
+        </button>
+        @if (editandoId()) {
+          <button type="button" (click)="cancelarEdicao()">Cancelar</button>
+        }
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <div class="list-section">
+    <h2>Lista de Pessoas (API Quarkus)</h2>
+
+    @if (pessoas().length > 0) {
+      <ul>
+        @for (pessoa of pessoas(); track pessoa.id) {
+          <li>
+            <span>{{ pessoa.name }} ({{ pessoa.email }})</span>
+            <div class="actions">
+              <button (click)="iniciarEdicao(pessoa)">Editar</button>
+              <button class="delete-btn" (click)="deletarPessoa(pessoa.id)">Excluir</button>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>Carregando pessoas ou nenhuma encontrada...</p>
+    }
+  </div>
 </div>
