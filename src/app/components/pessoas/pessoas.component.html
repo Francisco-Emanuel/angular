@@ -1,0 +1,13 @@
+<div>
+  <h2>Lista de Pessoas (API Quarkus)</h2>
+
+  @if (pessoas().length > 0) {
+    <ul>
+      @for (pessoa of pessoas(); track pessoa.id) {
+        <li>{{ pessoa.nome }} ({{ pessoa.email }} anos)</li>
+      }
+    </ul>
+  } @else {
+    <p>Carregando pessoas ou nenhuma encontrada...</p>
+  }
+</div>
